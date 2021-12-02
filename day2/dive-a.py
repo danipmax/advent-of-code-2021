@@ -1,5 +1,5 @@
 ### DAY 2 ###
-
+### TASK 1 ###
 # I downloaded and saved the input file as a .txt because I was getting a 400 Bad Request Error when trying to open it with urllib.request.urlopen
 
 f = open("input.txt", "r")
@@ -17,26 +17,17 @@ for i in range(len(list_str)):
     sub_list[1] = int(sub_list[1])
     directions_list.append(sub_list)
 
-# Convert the list of lists to a dictionary where the key will be the direction, and the value will be a list of
-# all the integers corresponding to this value
-directions_dict = {}
+horizontal = 0
+depth = 0
+# add isntructions
 for sub_list in directions_list:
-    # print(elem[0])
-    if sub_list[0] not in directions_dict:
-        directions_dict[sub_list[0]] = []
-    directions_dict[sub_list[0]].append(sub_list[1])
-
-# Add all the values in the list and assign the sumation of each list to the corresponding dictionary key
-for key, value in directions_dict.items():
-    directions_dict[key] = sum(value)
-
-# get the values from the dict
-horizontal = directions_dict.get("forward")
-vertical = directions_dict.get("down") - directions_dict.get("up")
-
-# do the maths
-multiplication = horizontal * vertical
+    if sub_list[0] == "forward":
+        horizontal += sub_list[1]
+    elif sub_list[0] == "down":
+        depth += sub_list[1]
+    elif sub_list[0] == "up":
+        depth -= sub_list[1]
 
 print(
-    f"If you multiply your final horizontal position by your final depth you get {multiplication}."
+    f"If you multiply your final horizontal position by your final depth you get {horizontal * depth}."
 )
