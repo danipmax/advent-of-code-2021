@@ -18,17 +18,12 @@ else:
 # make a list of the bits in the first position, then a list of the bits in the second position and
 # then find the most common bit on each list.
 
-most_common = []
-least_common = []
-for i in range(number_len):
-    # make the list
-    list = [string[i] for string in list_str]
-    # find the most common bit on the list
-    high_freq = max(list, key=list.count)
-    # find the least common bit on he list
-    low_freq = min(list, key=list.count)
-    most_common.append(high_freq)
-    least_common.append(low_freq)
+# make the list of lists
+list = [[string[i] for string in list_str] for i in range(number_len)]
+# find the most common bit on each list
+most_common = [max(list[i], key=list[i].count) for i in range(len(list))]
+# find the least common bit on each list
+least_common = [min(list[i], key=list[i].count) for i in range(len(list))]
 
 # Convert binary strings to decimal
 gamma = int("".join(most_common), 2)
