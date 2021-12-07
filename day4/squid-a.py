@@ -37,9 +37,6 @@ def lists_cards(list_str):
             card = []
     list_of_cards_rows.append(card)
 
-    # convert the list of cards where the sublists are rows, to a list of cards comrising 5 sublists per card
-    # with each sublist representing one column
-
     list_of_cards_cols = []
     for i in range(len(list_of_cards_rows)):
         card = []
@@ -58,16 +55,16 @@ cards = lists_cards(list_str)
 
 # call numbers
 numbers_called = [
-    list_numbers_called[:i] for i in range(0, len(list_numbers_called) + 1, 5)
+    list_numbers_called[:i] for i in range(0, len(list_numbers_called) + 1)
 ]
-# print(list_of_cards_rows)
-
+# removing empty lists
+numbers_called = [list for list in numbers_called if list != []]
 
 # find winning cards
 # call the numbers
 
-
 def card_check(numbers_called, list_of_cards):
+    """ADD DOCSTRING"""
     for k in range(len(numbers_called)):
 
         for i in range(len(list_of_cards[0])):
@@ -80,25 +77,17 @@ def card_check(numbers_called, list_of_cards):
                     flat_list_card = [
                         item for row in list_of_cards[0][i] for item in row
                     ]
-                    return flat_list_card
+                    return flat_list_card, numbers_called[k]
                 elif all(item in numbers_called[k] for item in col_to_check) == True:
                     flat_list_card = [
                         item for row in list_of_cards[1][i] for item in row
                     ]
                     return flat_list_card, numbers_called[k]
+                else:
+                    continue
 
 
 result = card_check(numbers_called, cards)
 unmarked_numbers = [value for value in result[0] if value not in result[1]]
 score = sum(unmarked_numbers) * result[1][-1]
 print(score)
-
-# find common elements between 2 lists and remove them from the first
-# find common elements:
-# remove them from the card
-
-
-# kei = card_check(numbers_called, list_of_cards_cols, list_of_cards_rows)
-# print(kei)
-
-#
