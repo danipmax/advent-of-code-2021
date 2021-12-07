@@ -13,112 +13,92 @@ list_str = raw_input.split("\n")
 # get the list of the numbers called
 list_numbers_called = [int(i) for i in list_str[0].split(",")]
 
-# convert the cards to lists comprising five lists each. Each sublist is a row
 
-list_of_cards_rows = []
-card = []
-for row in list_str[1:]:
-    if row != "":
-        row_list = [int(i) for i in row.split()]
-        card.append(row_list)
-    else:
-        list_of_cards_rows.append(card)
-        card = []
-list_of_cards_rows.append(card)
-list_of_cards_rows = [item for item in list_of_cards_rows if item != []]
-# convert the list of cards where the sublists are rows, to a list of cards comrising 5 sublists per card
-# with each sublist representing one column
-
-list_of_cards_cols = []
-for i in range(len(list_of_cards_rows)):
+def lists_cards(list_str):
+    """
+    This function produces two lists of the cards available. They
+    comprise lists that represent the cards. Each card comprises of five sublists.
+    In the first case, the sublists represent the rows of the cards and in the second
+    case, the sublist represent the columns of the cards.
+    Parameters:
+        list (list): list of numbers (int)
+    Returns:
+        list_of_cards_rows, list_of_cards_cols (tuple): list of cards
+    """
+    # convert the cards to lists comprising five lists each. Each sublist is a row
+    list_of_cards_rows = []
     card = []
-    for j in range(5):
-        row = list_of_cards_rows[i][j]
-        column = []
-        for m in range(5):
-            col = list_of_cards_rows[i][m][j]
-            column.append(col)
-        card.append(column)
-    list_of_cards_cols.append(card)
+    for row in list_str[2:]:
+        if row != "":
+            row_list = [int(i) for i in row.split()]
+            card.append(row_list)
+        else:
+            list_of_cards_rows.append(card)
+            card = []
+    list_of_cards_rows.append(card)
+
+    # convert the list of cards where the sublists are rows, to a list of cards comrising 5 sublists per card
+    # with each sublist representing one column
+
+    list_of_cards_cols = []
+    for i in range(len(list_of_cards_rows)):
+        card = []
+        for j in range(5):
+            row = list_of_cards_rows[i][j]
+            column = []
+            for m in range(5):
+                col = list_of_cards_rows[i][m][j]
+                column.append(col)
+            card.append(column)
+        list_of_cards_cols.append(card)
+    return list_of_cards_rows, list_of_cards_cols
+
+
+cards = lists_cards(list_str)
 
 # call numbers
 numbers_called = [
     list_numbers_called[:i] for i in range(0, len(list_numbers_called) + 1, 5)
 ]
 # print(list_of_cards_rows)
+
+
 # find winning cards
 # call the numbers
 
-for k in range(len(numbers_called)):
 
-    for i in range(len(list_of_cards_cols)):
-        for j in range(5):
-            # compare each row and column from each card to the numbers called
-            row_to_check = list_of_cards_rows[i][j]
-            col_to_check = list_of_cards_cols[i][j]
+def card_check(numbers_called, list_of_cards):
+    for k in range(len(numbers_called)):
 
-            if (all(item in numbers_called[k] for item in row_to_check) == True) or (
-                all(item in numbers_called[k] for item in col_to_check) == True
-            ):
-                print(list_of_cards_rows[i])
-                print(numbers_called[k])
-                print(i)
-                print(k)
-                quit()
+        for i in range(len(list_of_cards[0])):
+            for j in range(5):
+                # compare each row and column from each card to the numbers called
+                row_to_check = list_of_cards[0][i][j]
+                col_to_check = list_of_cards[1][i][j]
 
-# check rows and columns
+                if all(item in numbers_called[k] for item in row_to_check) == True:
+                    flat_list_card = [
+                        item for row in list_of_cards[0][i] for item in row
+                    ]
+                    return flat_list_card
+                elif all(item in numbers_called[k] for item in col_to_check) == True:
+                    flat_list_card = [
+                        item for row in list_of_cards[1][i] for item in row
+                    ]
+                    return flat_list_card, numbers_called[k]
 
-# for k in range(len(numbers_called)):
-#     for i in range(1, len(list_of_cards)):
-#         for j in range(5):
-#             row = list_of_cards[i][j]
-#             column = []
-#             for m in range(5):
-#                 col = list_of_cards[i][m][j]
-#                 column.append(col)
 
-#             if (all(item in numbers_called[k] for item in row) == True) or (
-#                 all(item in numbers_called[k] for item in column) == True
-#             ):
-#                 print(list_of_cards[i])
-#                 print(numbers_called[k])
-#                 print(i)
-#                 print(k)
-#                 # pick unmarked numbers
-#                 flat_list_card = [item for row in list_of_cards[i] for item in row]
-#                 print(flat_list_card)
-#                 list_unmarked_numbers = [num for num in flat_list_card if num not in numbers_called[k]]
-#                 quit()
-#             else:
-#                 continue
-list_of_cards = list_of_cards_rows
-print("nd")
+result = card_check(numbers_called, cards)
+unmarked_numbers = [value for value in result[0] if value not in result[1]]
+score = sum(unmarked_numbers) * result[1][-1]
+print(score)
 
-# check rows
-# for k in range(len(numbers_called)):
-#     for i in range(1, len(list_of_cards)):
-#         for j in range(5):
-#             row = list_of_cards[i][j]
-#             if all(item in numbers_called[k] for item in row) == True:
-#                 print(list_of_cards[i])
-#                 print(numbers_called[k])
-#                 print(row)
-#                 print(i)
-#                 quit()
+# find common elements between 2 lists and remove them from the first
+# find common elements:
+# remove them from the card
 
-# check columns
-# for k in range(len(numbers_called)):
 
-#     for i in range(1, len(list_of_cards)):
-#         for j in range(5):
-#             column = []
+# kei = card_check(numbers_called, list_of_cards_cols, list_of_cards_rows)
+# print(kei)
 
-#             for m in range(5):
-#                 col = list_of_cards[i][m][j]
-#                 column.append(col)
-#             if all(item in numbers_called[k] for item in column) == True:
-#                 print(list_of_cards[i])
-#                 print(numbers_called[k])
-#                 print(column)
-#                 print(i)
-#                 quit()
+#
